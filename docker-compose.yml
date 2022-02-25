@@ -1,0 +1,46 @@
+version: "3"
+services:
+
+  purin-api:
+    build: ./server
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - 3001:3001
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    command: npm run toru
+    networks:
+      - default
+
+  mysql:
+    build: ./database
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: hafuboard
+      MYSQL_USER: purin
+      MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: 123456 
+    ports:
+      - 3306:3306
+    networks:
+      - default
+
+  react-app:
+    container_name: forums
+    build: ./webboard
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./webboard/src:/app/src
+      - ./webboard/public/assets:/app/public/assets
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    stdin_open: true
+    command: npm start
+    networks:
+      - default

@@ -1,0 +1,8 @@
+FROM mysql
+
+ENV MYSQL_DATABASE=hafuboard
+ENV MYSQL_USER=purin
+ENV MYSQL_PASSWORD=123456
+ENV MYSQL_ROOT_PASSWORD=123456
+
+ADD hafuboard.sql /docker-entrypoint-initdb.d
